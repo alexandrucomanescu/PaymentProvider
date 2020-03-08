@@ -1,7 +1,7 @@
-using PaymentProvider.Infrastructure.Persistence;
 using System;
+using PaymentProvider.Infrastructure.Persistence;
 
-namespace PaymentProvider.Application.UnitTests.Common
+namespace PaymentProvider.Application.UnitTests
 {
     public class CommandTestBase : IDisposable
     {

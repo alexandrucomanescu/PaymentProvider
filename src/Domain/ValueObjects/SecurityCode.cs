@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PaymentProvider.Domain.Common;
 using PaymentProvider.Domain.Exceptions;
 
@@ -17,12 +18,20 @@ namespace PaymentProvider.Domain.ValueObjects
         {
             var securityCode = new SecurityCode();
 
-            if (code.Length != 3)
+            try
             {
-                throw new SecurityCodeInvalidException(code, null);
+                if (code.Length != 3 || !int.TryParse(code, out _))
+                {
+                    throw new SecurityCodeInvalidException(code, null);
+                }
+
+                securityCode.Code = code;
+            }
+            catch (Exception ex)
+            {
+                throw new SecurityCodeInvalidException(code, ex);
             }
 
-            securityCode.Code = code;
             return securityCode;
         }
 

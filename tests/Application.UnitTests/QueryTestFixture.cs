@@ -4,7 +4,7 @@ using PaymentProvider.Application.Common.Mappings;
 using PaymentProvider.Infrastructure.Persistence;
 using Xunit;
 
-namespace PaymentProvider.Application.UnitTests.Common
+namespace PaymentProvider.Application.UnitTests
 {
     public sealed class QueryTestFixture : IDisposable
     {
