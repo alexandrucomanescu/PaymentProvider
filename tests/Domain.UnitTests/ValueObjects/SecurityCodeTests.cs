@@ -1,4 +1,5 @@
 ﻿using PaymentProvider.Domain.Exceptions;
+using PaymentProvider.Domain.Exceptions.InvalidExceptions;
 using PaymentProvider.Domain.ValueObjects;
 using Shouldly;
 using Xunit;

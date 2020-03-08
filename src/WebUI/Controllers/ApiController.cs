@@ -1,16 +1,29 @@
-﻿using MediatR;
+﻿using System;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+using PaymentProvider.Application.Payments.Commands.CreatePayment;
 
 namespace PaymentProvider.WebUI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public abstract class ApiController : ControllerBase
+    public class ApiController : ApiControllerBase
     {
-        private IMediator _mediator;
 
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        public ApiController(IMediator mediator)
+        {
+            this.Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
+
+        [HttpPost]
+        [ActionName("ProcessPayment")]
+        public async Task<ActionResult> ProcessPayment(CreatePaymentCommand command)
+        {
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
 
     }
 }

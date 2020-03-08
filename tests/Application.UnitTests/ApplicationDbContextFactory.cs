@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using PaymentProvider.Domain.Entities;
 
 namespace PaymentProvider.Application.UnitTests
 {
@@ -45,7 +46,14 @@ namespace PaymentProvider.Application.UnitTests
         public static void SeedSampleData(ApplicationDbContext context)
         {
             //Add data
-
+            context.Payments.AddRange(
+                new Payment
+                {
+                //    Id = new Guid(),
+                //    Amount = 30,
+                //    SecurityCode = "123",
+                    
+                });
             context.SaveChanges();
         }
 

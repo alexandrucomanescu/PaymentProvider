@@ -6,22 +6,32 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/WeatherForecast": {
-      "get": {
+    "/api/Api": {
+      "post": {
         "tags": [
-          "WeatherForecast"
+          "Api"
         ],
-        "operationId": "WeatherForecast_Get",
+        "operationId": "Api_ProcessPayment",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -32,25 +42,29 @@
   },
   "components": {
     "schemas": {
-      "WeatherForecast": {
+      "CreatePaymentCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "summary": {
+          "creditCardNumber": {
             "type": "string",
             "nullable": true
+          },
+          "cardHolder": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }

@@ -7,12 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace PaymentProvider.WebUI.Controllers
 {
-    public class WeatherForecastController : ApiController
+    public class WeatherForecastController : ControllerBase
     {
         private IMediator _mediator;
 
-        protected IMediator Mediator => _mediator ?? HttpContext.RequestServices.GetService<IMediator>();
-
+        protected new IMediator Mediator => _mediator ?? HttpContext.RequestServices.GetService<IMediator>();
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get()

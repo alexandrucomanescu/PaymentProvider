@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using PaymentProvider.Domain.Exceptions;
+using PaymentProvider.Domain.Exceptions.InvalidExceptions;
 
 namespace PaymentProvider.WebUI.Common
 {
@@ -37,6 +39,10 @@ namespace PaymentProvider.WebUI.Common
 
             switch (exception)
             {
+                case InvalidException validationException:
+                    code = HttpStatusCode.BadRequest;
+                    //result = JsonConvert.SerializeObject(validationException.Failures);
+                    break;
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;
                     result = JsonConvert.SerializeObject(validationException.Failures);

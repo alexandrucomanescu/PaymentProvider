@@ -28,12 +28,13 @@ namespace PaymentProvider.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentState",
+                name: "PaymentStates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(),
                     PaymentId = table.Column<Guid>(),
                     Status = table.Column<int>(),
+                    StatusName = table.Column<string>(),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -41,7 +42,7 @@ namespace PaymentProvider.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentState", x => x.Id);
+                    table.PrimaryKey("PK_PaymentStates", x => x.Id);
                     
                 });
         }

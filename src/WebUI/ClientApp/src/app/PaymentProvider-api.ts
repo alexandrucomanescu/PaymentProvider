@@ -14,14 +14,14 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface IWeatherForecastClient {
-    get(): Observable<WeatherForecast[]>;
+export interface IApiClient {
+    processPayment(command: CreatePaymentCommand): Observable<FileResponse>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class WeatherForecastClient implements IWeatherForecastClient {
+export class ApiClient implements IApiClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -31,66 +31,65 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    get(): Observable<WeatherForecast[]> {
-        let url_ = this.baseUrl + "/api/WeatherForecast";
+    processPayment(command: CreatePaymentCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Api";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(command);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",			
             headers: new HttpHeaders({
-                "Accept": "application/json"
+                "Content-Type": "application/json", 
+                "Accept": "application/octet-stream"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGet(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processProcessPayment(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGet(<any>response_);
+                    return this.processProcessPayment(<any>response_);
                 } catch (e) {
-                    return <Observable<WeatherForecast[]>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<WeatherForecast[]>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<WeatherForecast[]> {
+    protected processProcessPayment(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(WeatherForecast.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<WeatherForecast[]>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
-export class WeatherForecast implements IWeatherForecast {
-    date?: Date;
-    temperatureC?: number;
-    temperatureF?: number;
-    summary?: string | undefined;
+export class CreatePaymentCommand implements ICreatePaymentCommand {
+    creditCardNumber?: string | undefined;
+    cardHolder?: string | undefined;
+    securityCode?: string | undefined;
+    amount?: number;
+    expirationDate?: Date;
 
-    constructor(data?: IWeatherForecast) {
+    constructor(data?: ICreatePaymentCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -101,35 +100,45 @@ export class WeatherForecast implements IWeatherForecast {
 
     init(_data?: any) {
         if (_data) {
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.temperatureC = _data["temperatureC"];
-            this.temperatureF = _data["temperatureF"];
-            this.summary = _data["summary"];
+            this.creditCardNumber = _data["creditCardNumber"];
+            this.cardHolder = _data["cardHolder"];
+            this.securityCode = _data["securityCode"];
+            this.amount = _data["amount"];
+            this.expirationDate = _data["expirationDate"] ? new Date(_data["expirationDate"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): WeatherForecast {
+    static fromJS(data: any): CreatePaymentCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new WeatherForecast();
+        let result = new CreatePaymentCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["temperatureC"] = this.temperatureC;
-        data["temperatureF"] = this.temperatureF;
-        data["summary"] = this.summary;
+        data["creditCardNumber"] = this.creditCardNumber;
+        data["cardHolder"] = this.cardHolder;
+        data["securityCode"] = this.securityCode;
+        data["amount"] = this.amount;
+        data["expirationDate"] = this.expirationDate ? this.expirationDate.toISOString() : <any>undefined;
         return data; 
     }
 }
 
-export interface IWeatherForecast {
-    date?: Date;
-    temperatureC?: number;
-    temperatureF?: number;
-    summary?: string | undefined;
+export interface ICreatePaymentCommand {
+    creditCardNumber?: string | undefined;
+    cardHolder?: string | undefined;
+    securityCode?: string | undefined;
+    amount?: number;
+    expirationDate?: Date;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {

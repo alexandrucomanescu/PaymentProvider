@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using PaymentProvider.Domain.Common;
 using PaymentProvider.Domain.Enums;
 
 namespace PaymentProvider.Domain.Entities
 {
-    public class PaymentState
+    public class PaymentState :AuditableEntity
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         public PaymentStatus Status { get; set; }
         
-        public Payment Payment { get; set; }
+        public Guid PaymentId { get; set; }
     }
 }

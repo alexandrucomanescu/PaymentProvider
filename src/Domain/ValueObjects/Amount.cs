@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using PaymentProvider.Domain.Common;
 using PaymentProvider.Domain.Exceptions;
+using PaymentProvider.Domain.Exceptions.InvalidExceptions;
 
 namespace PaymentProvider.Domain.ValueObjects
 {

@@ -1,4 +1,5 @@
-﻿using PaymentProvider.Domain.Common;
+﻿using System.Collections.Generic;
+using PaymentProvider.Domain.Common;
 
 namespace PaymentProvider.Domain.Enums
 {
@@ -12,5 +13,9 @@ namespace PaymentProvider.Domain.Enums
             : base(id, name)
         {
         }
+
+
+        public static IEnumerable<PaymentStatus> List() =>
+            new[] { Pending, Failed, Success};
     }
 }

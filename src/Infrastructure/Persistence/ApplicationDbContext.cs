@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using PaymentProvider.Domain.Enums;
+using PaymentProvider.Infrastructure.Persistence.Configurations;
 
 namespace PaymentProvider.Infrastructure.Persistence
 {
@@ -27,9 +29,8 @@ namespace PaymentProvider.Infrastructure.Persistence
             _dateTime = dateTime;
         }
 
-        public DbSet<Payment> TodoLists { get; set; }
-
-        //public DbSet<PaymentStatus> TodoItems { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentState> PaymentStates { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -54,6 +55,9 @@ namespace PaymentProvider.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            builder.ApplyConfiguration(new PaymentConfiguration());
+
+            builder.ApplyConfiguration(new PaymentStatesConfiguration());
 
             base.OnModelCreating(builder);
         }
