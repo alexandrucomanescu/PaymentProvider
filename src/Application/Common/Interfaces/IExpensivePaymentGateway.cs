@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PaymentProvider.Application.Common.Interfaces
 {
-    public interface IExpensivePaymentGateway
+    public interface IExpensivePaymentGateway : IPaymentGateway
     {
     }
 }

@@ -39,9 +39,8 @@ namespace PaymentProvider.WebUI.Common
 
             switch (exception)
             {
-                case InvalidException validationException:
+                case InvalidException _:
                     code = HttpStatusCode.BadRequest;
-                    //result = JsonConvert.SerializeObject(validationException.Failures);
                     break;
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;

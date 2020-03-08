@@ -17,7 +17,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePaymentCommand"
+                "$ref": "#/components/schemas/ProcessPaymentCommand"
               }
             }
           },
@@ -42,7 +42,7 @@
   },
   "components": {
     "schemas": {
-      "CreatePaymentCommand": {
+      "ProcessPaymentCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

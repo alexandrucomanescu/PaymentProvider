@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IApiClient {
-    processPayment(command: CreatePaymentCommand): Observable<FileResponse>;
+    processPayment(command: ProcessPaymentCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -31,7 +31,7 @@ export class ApiClient implements IApiClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    processPayment(command: CreatePaymentCommand): Observable<FileResponse> {
+    processPayment(command: ProcessPaymentCommand): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Api";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -82,14 +82,14 @@ export class ApiClient implements IApiClient {
     }
 }
 
-export class CreatePaymentCommand implements ICreatePaymentCommand {
+export class ProcessPaymentCommand implements IProcessPaymentCommand {
     creditCardNumber?: string | undefined;
     cardHolder?: string | undefined;
     securityCode?: string | undefined;
     amount?: number;
     expirationDate?: Date;
 
-    constructor(data?: ICreatePaymentCommand) {
+    constructor(data?: IProcessPaymentCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -108,9 +108,9 @@ export class CreatePaymentCommand implements ICreatePaymentCommand {
         }
     }
 
-    static fromJS(data: any): CreatePaymentCommand {
+    static fromJS(data: any): ProcessPaymentCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new CreatePaymentCommand();
+        let result = new ProcessPaymentCommand();
         result.init(data);
         return result;
     }
@@ -126,7 +126,7 @@ export class CreatePaymentCommand implements ICreatePaymentCommand {
     }
 }
 
-export interface ICreatePaymentCommand {
+export interface IProcessPaymentCommand {
     creditCardNumber?: string | undefined;
     cardHolder?: string | undefined;
     securityCode?: string | undefined;

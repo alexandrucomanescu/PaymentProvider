@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PaymentProvider.Application.Payments.Commands.CreatePayment;
+using PaymentProvider.Application.Payments.Commands.ProcessPaymentCommand;
 
 namespace PaymentProvider.WebUI.Controllers
 {
@@ -18,7 +19,7 @@ namespace PaymentProvider.WebUI.Controllers
 
         [HttpPost]
         [ActionName("ProcessPayment")]
-        public async Task<ActionResult> ProcessPayment(CreatePaymentCommand command)
+        public async Task<ActionResult> ProcessPayment(ProcessPaymentCommand command)
         {
             await Mediator.Send(command);
 

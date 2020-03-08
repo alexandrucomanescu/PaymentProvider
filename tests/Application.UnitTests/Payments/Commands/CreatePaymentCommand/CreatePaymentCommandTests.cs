@@ -44,22 +44,25 @@ namespace PaymentProvider.Application.UnitTests.Payments.Commands.CreatePaymentC
         [Fact]
         public async Task Handle_ShouldPersistPaymentState()
         {
+            var dateTimeMock = new Mock<IDateTime>();
+            dateTimeMock.Setup(m => m.Now)
+                .Returns(new DateTime(4001, 1, 1));
+
+
             var command = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand
             {
                 Amount = 80,
-                ExpirationDate = DateTime.Today,
+                ExpirationDate = DateTime.Now,
                 CardHolder = "test",
                 SecurityCode = "123",
                 CreditCardNumber = "379354508162306"
             };
 
-            var dateTimeMock = new Mock<IDateTime>();
-            dateTimeMock.Setup(m => m.Now)
-                .Returns(new DateTime(3001, 1, 1));
+            
 
             var handler = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand.CreatePaymentCommandHandler(Context, dateTimeMock.Object);
 
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None); 
 
             var entity = Context.Payments.First();
 
