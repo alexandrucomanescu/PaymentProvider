@@ -3,14 +3,14 @@ using PaymentProvider.Application.Payments.Commands.CreatePayment;
 using Shouldly;
 using Xunit;
 
-namespace PaymentProvider.Application.UnitTests.Payments.Commands
+namespace PaymentProvider.Application.UnitTests.Payments.Commands.CreatePaymentCommand
 {
     public class CreatePaymentCommandValidatorTests : CommandTestBase 
     {
         [Fact]
         public void IsValid_ShouldBeTrue_WhenAllParametersAreCorrect()
         {
-            var command = new CreatePaymentCommand
+            var command = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand
             {
                 Amount = 30,
                 SecurityCode = "123",
@@ -29,7 +29,7 @@ namespace PaymentProvider.Application.UnitTests.Payments.Commands
         [Fact]
         public void IsValid_ShouldBeFalse_WhenMissingMandatoryFields()
         {
-            var command = new CreatePaymentCommand
+            var command = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand
             {
                 Amount = 30,
                 ExpirationDate = DateTime.Today,

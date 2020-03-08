@@ -39,27 +39,25 @@ namespace PaymentProvider.Application.UnitTests
 
             context.Database.EnsureCreated();
 
-            //SeedSampleData(context);
-
             return context;
         }
 
-        //public static void SeedSampleData(ApplicationDbContext context)
-        //{
-        //    //Add data
-        //    context.Payments.AddRange(
-        //        new Payment
-        //        {
-        //            Id = new Guid(),
-        //            Amount = (Amount)30,
-        //            SecurityCode = (SecurityCode)"123",
-        //            ExpirationDate = DateTime.Today,
-        //            CardHolder = "test",
-        //            CreditCardNumber = (CreditCardNumber)"379354508162306"
+        public static void SeedSampleData(ApplicationDbContext context)
+        {
+            //Add data
+            context.Payments.AddRange(
+                new Payment
+                {
+                    Id = new Guid(),
+                    Amount = (Amount)30,
+                    SecurityCode = (SecurityCode)"123",
+                    ExpirationDate = DateTime.Today,
+                    CardHolder = "test",
+                    CreditCardNumber = (CreditCardNumber)"379354508162306"
 
-        //        });
-        //    context.SaveChanges();
-        //}
+                });
+            context.SaveChanges();
+        }
 
         public static void Destroy(ApplicationDbContext context)
         {

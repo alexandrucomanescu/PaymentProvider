@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using PaymentProvider.Application.Common.Interfaces;
-using PaymentProvider.Application.Payments.Commands.CreatePayment;
 using PaymentProvider.Domain.Enums;
 using Shouldly;
 using Xunit;
 
-namespace PaymentProvider.Application.UnitTests.Payments.Commands
+namespace PaymentProvider.Application.UnitTests.Payments.Commands.CreatePaymentCommand
 {
     public class CreatePaymentCommandTests : CommandTestBase
     {
         [Fact]
         public async Task Handle_ShouldPersistPayment()
         {
-            var command = new CreatePaymentCommand
+            var command = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand
             {
                 Amount = 80,
                 ExpirationDate = DateTime.Today,
@@ -32,7 +29,7 @@ namespace PaymentProvider.Application.UnitTests.Payments.Commands
             dateTimeMock.Setup(m => m.Now)
                 .Returns(new DateTime(3001, 1, 1));
 
-            var handler = new CreatePaymentCommand.CreatePaymentCommandHandler(Context, dateTimeMock.Object);
+            var handler = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand.CreatePaymentCommandHandler(Context, dateTimeMock.Object);
 
             var result = await handler.Handle(command, CancellationToken.None);
 
@@ -47,7 +44,7 @@ namespace PaymentProvider.Application.UnitTests.Payments.Commands
         [Fact]
         public async Task Handle_ShouldPersistPaymentState()
         {
-            var command = new CreatePaymentCommand
+            var command = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand
             {
                 Amount = 80,
                 ExpirationDate = DateTime.Today,
@@ -60,7 +57,7 @@ namespace PaymentProvider.Application.UnitTests.Payments.Commands
             dateTimeMock.Setup(m => m.Now)
                 .Returns(new DateTime(3001, 1, 1));
 
-            var handler = new CreatePaymentCommand.CreatePaymentCommandHandler(Context, dateTimeMock.Object);
+            var handler = new Application.Payments.Commands.CreatePayment.CreatePaymentCommand.CreatePaymentCommandHandler(Context, dateTimeMock.Object);
 
             var result = await handler.Handle(command, CancellationToken.None);
 
