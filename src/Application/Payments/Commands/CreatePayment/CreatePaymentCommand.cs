@@ -33,9 +33,10 @@ namespace PaymentProvider.Application.Payments.Commands.CreatePayment
 
             public async Task<Unit> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
             {
+                var paymentId = new Guid();
                 var entity = new Payment
                 {
-                    Id = new Guid(),
+                    Id = paymentId,
                     CreditCardNumber = (CreditCardNumber) request.CreditCardNumber,
                     CardHolder = request.CardHolder,
                     SecurityCode = (SecurityCode) request.SecurityCode,
@@ -47,12 +48,10 @@ namespace PaymentProvider.Application.Payments.Commands.CreatePayment
                 var entityState = new PaymentState
                 {
                     Id = new Guid(),
-                    PaymentId = entity.Id,
+                    PaymentId = paymentId.ToString(),
                     Created = _dateTime.Now,
                     Status = PaymentStatus.Pending
                 };
-
-                entityState.PaymentId = entity.Id;
 
                 _context.Payments.Add(entity);
                 _context.PaymentStates.Add(entityState);

@@ -7,9 +7,8 @@ namespace PaymentProvider.Domain.Entities
     public class PaymentState :AuditableEntity
     {
         public Guid Id { get; set; }
-
+        public string PaymentId { get; set; }
         public PaymentStatus Status { get; set; }
-        
-        public Guid PaymentId { get; set; }
+      
     }
 }

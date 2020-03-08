@@ -9,6 +9,8 @@ namespace PaymentProvider.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<PaymentState> builder)
         {
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.PaymentId)
+                .IsRequired();
             builder.OwnsOne(p => p.Status, a =>
             {
                 a.Property(ps => ps.Id).HasColumnName("Status");

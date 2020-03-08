@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using PaymentProvider.Domain.Entities;
+using PaymentProvider.Domain.ValueObjects;
 
 namespace PaymentProvider.Application.UnitTests
 {
@@ -38,24 +39,27 @@ namespace PaymentProvider.Application.UnitTests
 
             context.Database.EnsureCreated();
 
-            SeedSampleData(context);
+            //SeedSampleData(context);
 
             return context;
         }
 
-        public static void SeedSampleData(ApplicationDbContext context)
-        {
-            //Add data
-            context.Payments.AddRange(
-                new Payment
-                {
-                //    Id = new Guid(),
-                //    Amount = 30,
-                //    SecurityCode = "123",
-                    
-                });
-            context.SaveChanges();
-        }
+        //public static void SeedSampleData(ApplicationDbContext context)
+        //{
+        //    //Add data
+        //    context.Payments.AddRange(
+        //        new Payment
+        //        {
+        //            Id = new Guid(),
+        //            Amount = (Amount)30,
+        //            SecurityCode = (SecurityCode)"123",
+        //            ExpirationDate = DateTime.Today,
+        //            CardHolder = "test",
+        //            CreditCardNumber = (CreditCardNumber)"379354508162306"
+
+        //        });
+        //    context.SaveChanges();
+        //}
 
         public static void Destroy(ApplicationDbContext context)
         {

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentValidation;
+﻿using FluentValidation;
+using PaymentProvider.Application.Common.Interfaces;
 
 namespace PaymentProvider.Application.Payments.Commands.CreatePayment
 {
     public class CreatePaymentCommandValidator : AbstractValidator<CreatePaymentCommand>
     {
-        public CreatePaymentCommandValidator()
+        private readonly IApplicationDbContext _context;
+
+        public CreatePaymentCommandValidator(IApplicationDbContext context)
         {
+            _context = context;
+
             RuleFor(v => v.Amount)
                 .NotEmpty();
 
