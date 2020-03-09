@@ -43,9 +43,13 @@ Project is developed with
 - NSwag
 
 The solution has a DDD architecture.
+
 ***Domain***  contains Entities, ValueObjects, Enums. Domain project is independent, it doesn't have any dependency. 
+
 ***Application***  - here we can find the Commands and Actions that can be done on the objects from the Domain Layer. 
-***Infrastructure*** - ApplicationDbContext [we can add here the extra layer of Repository if we need it. Since the application is developed with .Net Core & EF Core, the repository is not necessary because EF Core insulates your code from database changes, DbContext acts as a unit of work, DbSet acts as a repository, EF Core has features for unit testing without repositories. We can add Unit of Work & Repository patterns if we would need to have an abstraction from EF Core layer.
+
+***Infrastructure*** - ApplicationDbContext [we can add here the extra layer of Repository if we need it]. Since the application is developed with .Net Core & EF Core, the repository is not necessary because EF Core insulates your code from database changes, DbContext acts as a unit of work, DbSet acts as a repository, EF Core has features for unit testing without repositories. We can add Unit of Work & Repository patterns if we would need to have an abstraction from EF Core layer.
+
 ***WebUI*** - here we have the Request that is called to process a payment.
 
 
